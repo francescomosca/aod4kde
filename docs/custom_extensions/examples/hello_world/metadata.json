@@ -1,0 +1,13 @@
+{
+  "id": "io.github.aod4kde.ext.helloworld",
+  "name": "Hello World",
+  "description": "Esempio minimale di estensione AOD senza impostazioni né demone",
+  "icon": "dialog-information",
+  "version": "1.0.0",
+  "author": "Community",
+  "lockscreenQml": "LockscreenWidget.qml",
+  "settingsQml": "",
+  "daemon": "",
+  "defaultConfig": {}
+}
+

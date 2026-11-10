@@ -1,0 +1,20 @@
+{
+  "id": "io.github.aod4kde.sensors",
+  "name": "Hardware Sensors",
+  "name[it]": "Sensori Hardware",
+  "description": "Displays real-time hardware statistics (CPU, Temperatures, Memory, etc.)",
+  "description[it]": "Mostra statistiche hardware in tempo reale (CPU, Temperature, Memoria, ecc.)",
+  "translationDomain": "io.github.aod4kde.sensors",
+  "icon": "utilities-system-monitor",
+  "version": "1.0.0",
+  "author": "AOD4KDE",
+  "lockscreenQml": "LockscreenWidget.qml",
+  "settingsQml": "SettingsWidget.qml",
+  "daemon": "",
+  "defaultConfig": {
+    "coloredSensors": true,
+    "sensors": [
+      { "id": "cpu/all/usage", "label": "CPU", "unit": "%" }
+    ]
+  }
+}

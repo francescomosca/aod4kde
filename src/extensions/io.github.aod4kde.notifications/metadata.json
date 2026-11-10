@@ -1,0 +1,15 @@
+{
+  "id": "io.github.aod4kde.notifications",
+  "name": "Notifications",
+  "name[it]": "Notifiche",
+  "description": "Displays application icons with pending or unread notifications",
+  "description[it]": "Mostra le icone delle applicazioni con notifiche pendenti o non lette",
+  "translationDomain": "io.github.aod4kde.notifications",
+  "icon": "preferences-desktop-notification",
+  "version": "1.0.0",
+  "author": "AOD4KDE",
+  "lockscreenQml": "LockscreenWidget.qml",
+  "settingsQml": "",
+  "daemon": "bin/aod-ext-notifications",
+  "defaultConfig": {}
+}

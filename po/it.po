@@ -1,0 +1,613 @@
+# Italian translation for AOD4KDE.
+# This file is distributed under the same license as the aod4kde package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: aod4kde\n"
+"Report-Msgid-Bugs-To: https://github.com/francescomosca/aod4kde/issues\n"
+"POT-Creation-Date: 2026-11-09 16:28+0100\n"
+"PO-Revision-Date: 2026-11-03 01:30+0100\n"
+"Last-Translator: Francesco Mosca\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/settings/aod-config.qml:93
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Appearance"
+msgstr "Aspetto"
+
+#: src/settings/aod-config.qml:94
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Extensions"
+msgstr "Estensioni"
+
+#: src/settings/aod-config.qml:95
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Behavior"
+msgstr "Comportamento"
+
+#: src/settings/aod-config.qml:96
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "About"
+msgstr "Informazioni"
+
+#: src/settings/aod-config.qml:379
+#, kde-format
+msgid "Always-On-Display Mode"
+msgstr "Modalità Always-On-Display"
+
+#: src/settings/aod-config.qml:387
+#, kde-format
+msgid "Show clock and extensions on the lockscreen"
+msgstr "Mostra orologio ed estensioni a schermo bloccato"
+
+#: src/settings/aod-config.qml:417
+#, kde-format
+msgid ""
+"There was a problem applying Always-On-Display to the system lockscreen. "
+"Please wait for an AOD4KDE update. Your settings remain available below."
+msgstr ""
+"Si è verificato un problema nell'applicare l'Always-On-Display alla "
+"schermata di blocco. È necessario attendere un aggiornamento di AOD4KDE. Le "
+"configurazioni restano comunque disponibili qui sotto."
+
+#: src/settings/aod-config.qml:425
+#, kde-format
+msgid ""
+"Display power management (DPMS) is active: to display AOD, you should "
+"disable display turn-off or set its timeout higher than the screen lock "
+"timeout."
+msgstr ""
+"Lo spegnimento dello schermo (DPMS) è attivo: per visualizzare l'AOD è "
+"necessario disattivarlo o aumentarlo a un tempo superiore a quello di blocco "
+"schermo."
+
+#: src/settings/aod-config.qml:428
+#, kde-format
+msgctxt "@action:button"
+msgid "Fix…"
+msgstr "Correggi..."
+
+#: src/settings/aod-config.qml:645
+#, kde-format
+msgctxt "@action:button"
+msgid "Test AOD (Lock Screen)"
+msgstr "Testa AOD (Blocca Schermo)"
+
+#: src/settings/aod-config.qml:656
+#, kde-format
+msgctxt "@action:button"
+msgid "OK"
+msgstr "OK"
+
+#: src/settings/aod-config.qml:671
+#, kde-format
+msgctxt "@action:button"
+msgid "Apply"
+msgstr "Applica"
+
+#: src/settings/aod-config.qml:678
+#: src/settings/components/ExtensionsList.qml:241
+#: src/settings/components/TabExtensions.qml:169
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Annulla"
+
+#: src/settings/aod-settings.cpp:153
+#, kde-format
+msgid "AOD4KDE Settings"
+msgstr "Impostazioni AOD4KDE"
+
+#: src/settings/components/ClockFontPicker.qml:40
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "System Font"
+msgstr "Font di sistema"
+
+#: src/settings/components/ClockFontPicker.qml:81
+#, kde-format
+msgid "Clock Style:"
+msgstr "Stile Orologio:"
+
+#: src/settings/components/ClockFontPicker.qml:86
+#, kde-format
+msgid "Select the clock typography."
+msgstr "Seleziona la tipografia dell'ora."
+
+#: src/settings/components/ClockFontPicker.qml:142
+#, kde-format
+msgctxt "@action:button"
+msgid "Choose…"
+msgstr "Scegli..."
+
+#: src/settings/components/ClockFontPicker.qml:158
+#: src/settings/components/ClockFontPicker.qml:161
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose a Style"
+msgstr "Scegli uno stile"
+
+#: src/settings/components/ExtensionCard.qml:113
+#, kde-format
+msgctxt "@label"
+msgid "Built-in"
+msgstr "Integrata"
+
+#: src/settings/components/ExtensionCard.qml:135
+#, kde-format
+msgctxt "@label"
+msgid "Active"
+msgstr "Attiva"
+
+#: src/settings/components/ExtensionCard.qml:136
+#, kde-format
+msgctxt "@label"
+msgid "Disabled"
+msgstr "Disattivata"
+
+#: src/settings/components/ExtensionCard.qml:183
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Collapse settings"
+msgstr "Comprimi impostazioni"
+
+#: src/settings/components/ExtensionCard.qml:183
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Expand settings"
+msgstr "Espandi impostazioni"
+
+#: src/settings/components/ExtensionCard.qml:199
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove extension"
+msgstr "Rimuovi estensione"
+
+#: src/settings/components/ExtensionCard.qml:213
+#, kde-format
+msgid ""
+"The background service for this extension failed to start or crashed "
+"repeatedly and was stopped."
+msgstr ""
+
+#: src/settings/components/ExtensionCard.qml:217
+#, kde-format
+msgctxt "@action:button"
+msgid "Retry"
+msgstr ""
+
+#: src/settings/components/ExtensionCard.qml:244
+#, kde-format
+msgid "Unable to load extension settings: the QML file contains errors."
+msgstr ""
+"Impossibile caricare le impostazioni dell'estensione: il file QML contiene "
+"errori."
+
+#: src/settings/components/ExtensionsList.qml:128
+#: src/settings/components/ExtensionsList.qml:181
+#, kde-format
+msgid "System"
+msgstr "Sistema"
+
+#: src/settings/components/ExtensionsList.qml:128
+#: src/settings/components/ExtensionsList.qml:181
+#, kde-format
+msgid "Community"
+msgstr "Community"
+
+#: src/settings/components/ExtensionsList.qml:141
+#, kde-format
+msgid "No extensions installed."
+msgstr "Nessuna estensione installata."
+
+#: src/settings/components/ExtensionsList.qml:222
+#, kde-format
+msgctxt "@title:window"
+msgid "Remove Extension"
+msgstr "Rimuovi estensione"
+
+#: src/settings/components/ExtensionsList.qml:229
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Rimuovi"
+
+#: src/settings/components/ExtensionsList.qml:255
+#, kde-format
+msgid ""
+"Are you sure you want to remove \"%1\"? Its files will be permanently "
+"deleted."
+msgstr ""
+"Sei sicuro di voler rimuovere \"%1\"? I suoi file verranno eliminati "
+"definitivamente."
+
+#: src/settings/components/ExtensionsList.qml:262
+#, kde-format
+msgctxt "@option:check"
+msgid "Keep saved extension settings"
+msgstr "Mantieni le configurazioni salvate dell'estensione"
+
+#: src/settings/components/ExtensionsList.qml:271
+#, kde-format
+msgid ""
+"Widgets are shown in AOD in the order above. Drag the handle to reorder them."
+msgstr ""
+"I widget sono mostrati nell'AOD nell'ordine indicato sopra. Trascina la "
+"maniglia per riordinarli."
+
+#: src/settings/components/TabAbout.qml:41
+#, kde-format
+msgid ""
+"Customizable Always-On-Display screen for KDE Plasma 6 with hardware stats, "
+"notifications, and burn-in protection."
+msgstr ""
+"Schermata Always-On-Display per KDE Plasma 6 personalizzabile con "
+"statistiche hardware, notifiche e protezione burn-in."
+
+#: src/settings/components/TabAbout.qml:52
+#, kde-format
+msgctxt "@title:group"
+msgid "Repository"
+msgstr "Repository"
+
+#: src/settings/components/TabAbout.qml:74
+#, kde-format
+msgctxt "@title:group"
+msgid "Copyright"
+msgstr "Copyright"
+
+#: src/settings/components/TabAbout.qml:83
+#, kde-format
+msgid "License: GPL-2.0+"
+msgstr "Licenza: GPL-2.0+"
+
+#: src/settings/components/TabAbout.qml:90
+#, kde-format
+msgctxt "@title:group"
+msgid "Authors"
+msgstr "Autori"
+
+#: src/settings/components/TabAppearance.qml:50
+#, kde-format
+msgid "AOD elements:"
+msgstr "Elementi dell'AOD:"
+
+#: src/settings/components/TabAppearance.qml:62
+#, kde-format
+msgid "Show date"
+msgstr "Mostra la data"
+
+#: src/settings/components/TabAppearance.qml:82
+#, kde-format
+msgid "Custom date format:"
+msgstr "Formato data personalizzato:"
+
+#: src/settings/components/TabAppearance.qml:110
+#, kde-format
+msgid "Preview: %1"
+msgstr "Anteprima: %1"
+
+#: src/settings/components/TabAppearance.qml:130
+#, kde-format
+msgid "Show battery status and percentage"
+msgstr "Mostra stato e percentuale batteria"
+
+#: src/settings/components/TabAppearance.qml:141
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "No battery detected"
+msgstr "Batteria non rilevata"
+
+#: src/settings/components/TabAppearance.qml:149
+#, kde-format
+msgid "Show lockscreen background"
+msgstr "Mostra lo sfondo della schermata di sblocco"
+
+#: src/settings/components/TabAppearance.qml:168
+#, kde-format
+msgid "Background opacity:"
+msgstr "Opacità sfondo:"
+
+#: src/settings/components/TabAppearance.qml:198
+#, kde-format
+msgid "0% = pure OLED black, 100% = full brightness"
+msgstr "0% = nero puro OLED, 100% = luminosità massima"
+
+#: src/settings/components/TabAppearance.qml:207
+#, kde-format
+msgid "⚠️ Not recommended on OLED"
+msgstr "⚠️ Sconsigliato su OLED"
+
+#: src/settings/components/TabAppearance.qml:230
+#, kde-format
+msgid "Interface scale:"
+msgstr "Scala interfaccia:"
+
+#: src/settings/components/TabAppearance.qml:256
+#, kde-format
+msgid "Adjust AOD size (min 50%, max 250%)"
+msgstr "Regola la dimensione dell'AOD (min 50%, max 250%)"
+
+#: src/settings/components/TabBehavior.qml:50
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "disconnected"
+msgstr "scollegato"
+
+#: src/settings/components/TabBehavior.qml:96
+#, kde-format
+msgid "Burn-In Protection (Pixel Shifting):"
+msgstr "Protezione Burn-In (Pixel Shifting):"
+
+#: src/settings/components/TabBehavior.qml:110
+#, kde-format
+msgid "Pixel shift frequency:"
+msgstr "Frequenza spostamento pixel:"
+
+#: src/settings/components/TabBehavior.qml:118
+#, kde-format
+msgid "Every 1 minute"
+msgstr "Ogni 1 minuto"
+
+#: src/settings/components/TabBehavior.qml:119
+#, kde-format
+msgid "Every 3 minutes"
+msgstr "Ogni 3 minuti"
+
+#: src/settings/components/TabBehavior.qml:120
+#, kde-format
+msgid "Every 5 minutes"
+msgstr "Ogni 5 minuti"
+
+#: src/settings/components/TabBehavior.qml:121
+#, kde-format
+msgid "Never (not recommended)"
+msgstr "Mai (sconsigliato)"
+
+#: src/settings/components/TabBehavior.qml:137
+#, kde-format
+msgid "Periodically shifts screen elements to prevent OLED burn-in."
+msgstr ""
+"Sposta ciclicamente gli elementi sullo schermo per preservare i pannelli "
+"OLED."
+
+#: src/settings/components/TabBehavior.qml:151
+#, kde-format
+msgid "Multiple Displays:"
+msgstr "Gestione display multipli:"
+
+#: src/settings/components/TabBehavior.qml:163
+#, kde-format
+msgid "Show AOD only on this screen:"
+msgstr "Mostra l'AOD solo su questo schermo:"
+
+#: src/settings/components/TabBehavior.qml:208
+#, kde-format
+msgid ""
+"Note: if the selected display is disconnected, AOD will automatically fall "
+"back to the primary display."
+msgstr ""
+"Nota: se lo schermo selezionato viene scollegato, l'AOD tornerà "
+"automaticamente sullo schermo principale."
+
+#: src/settings/components/TabBehavior.qml:222
+#, kde-format
+msgid "Time & Energy Management:"
+msgstr "Gestione Tempi & Risparmio Energetico:"
+
+#: src/settings/components/TabBehavior.qml:230
+#, kde-format
+msgid ""
+"<b>Important note on idle timeouts:</b><br/><br/>• <b>Screen locking:</b> "
+"Determines after how many minutes of inactivity AOD activates.<br/>• "
+"<b>Screen turn-off (DPMS):</b> Cuts power to the display.<br/>For AOD to "
+"remain visible, this value must be <b>greater</b> than the screen lock "
+"timeout (e.g. 15-30 min or Never)."
+msgstr ""
+"<b>Nota importante sui tempi di inattività:</b><br/><br/>• <b>Blocco dello "
+"schermo:</b> Determina dopo quanti minuti di inattività si attiva l'AOD.<br/"
+">• <b>Spegnimento dello schermo (DPMS):</b> Taglia l'alimentazione al "
+"monitor.<br/>Perché l'AOD resti visibile, questo valore deve essere "
+"<b>maggiore</b> rispetto al blocco schermo (es. 15-30 min o Mai)."
+
+#: src/settings/components/TabBehavior.qml:238
+#, kde-format
+msgctxt "@action:button"
+msgid "KDE Screen Locker"
+msgstr "Blocco Schermo KDE"
+
+#: src/settings/components/TabBehavior.qml:245
+#, kde-format
+msgctxt "@action:button"
+msgid "Energy Saving (DPMS)"
+msgstr "Risparmio Energetico (DPMS)"
+
+#: src/settings/components/TabExtensions.qml:119
+#, kde-format
+msgctxt "@title:group"
+msgid "Removed or Missing"
+msgstr "Rimosse o assenti"
+
+#: src/settings/components/TabExtensions.qml:125
+#, kde-format
+msgid "Unavailable. Reinstalling the plugin will restore its settings."
+msgstr "Non disponibili. Se reinstalli il plugin, ritroverà i suoi parametri."
+
+#: src/settings/components/TabExtensions.qml:170
+#, kde-format
+msgctxt "@action:button"
+msgid "Delete data"
+msgstr "Elimina dati"
+
+#: src/settings/components/TabExtensions.qml:207
+#, kde-format
+msgctxt "@action:button"
+msgid "Open extensions folder…"
+msgstr "Apri cartella estensioni..."
+
+#: src/settings/components/TabExtensions.qml:217
+#, kde-format
+msgctxt "@action:button"
+msgid "Reload"
+msgstr "Ricarica"
+
+#: src/tray/aod-tray.cpp:35
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Toggle AOD"
+msgstr "Attiva/Disattiva AOD"
+
+#: src/tray/aod-tray.cpp:38
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Settings…"
+msgstr "Impostazioni..."
+
+#: src/tray/aod-tray.cpp:42
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Quit"
+msgstr "Esci"
+
+#: src/tray/aod-tray.cpp:211
+#, kde-format
+msgctxt "@info:status"
+msgid "AOD: Incompatible"
+msgstr "AOD: Incompatibile"
+
+#: src/tray/aod-tray.cpp:212
+#, kde-format
+msgctxt "@info:status"
+msgid "Incompatible"
+msgstr "Incompatibile"
+
+#: src/tray/aod-tray.cpp:212 src/tray/aod-tray.cpp:216
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Always-On Display\n"
+"Status: %1\n"
+"Click to open settings"
+msgstr ""
+"Always-On Display\n"
+"Stato: %1\n"
+"Clicca per aprire le impostazioni"
+
+#: src/tray/aod-tray.cpp:214
+#, kde-format
+msgctxt "@info:status"
+msgid "AOD: ON"
+msgstr "AOD: ON"
+
+#: src/tray/aod-tray.cpp:214
+#, kde-format
+msgctxt "@info:status"
+msgid "AOD: OFF"
+msgstr "AOD: OFF"
+
+#: src/tray/aod-tray.cpp:216
+#, kde-format
+msgctxt "@info:status"
+msgid "ON"
+msgstr "ON"
+
+#: src/tray/aod-tray.cpp:216
+#, kde-format
+msgctxt "@info:status"
+msgid "OFF"
+msgstr "OFF"
+
+#: src/tray/aod-tray.cpp:264
+#, kde-format
+msgid "AOD4KDE Tray"
+msgstr "AOD4KDE Tray"
+
+#: src/tray/aod-tray.cpp:272
+#, kde-format
+msgid "aod-tray: another instance is already running. Exiting."
+msgstr "aod-tray: un'altra istanza è già in esecuzione. Uscita."
+
+#, kde-format
+#~ msgctxt "@title:window"
+#~ msgid "AOD Settings"
+#~ msgstr "Impostazioni AOD"
+
+#, kde-format
+#~ msgctxt "@label"
+#~ msgid "Unavailable"
+#~ msgstr "Non disponibile"
+
+#, kde-format
+#~ msgctxt "@title:group"
+#~ msgid "Uninstalled"
+#~ msgstr "Disinstallate"
+
+#, kde-format
+#~ msgid "This extension is no longer on disk, but its settings are preserved."
+#~ msgstr ""
+#~ "Questa estensione non è più presente su disco, ma i dati di "
+#~ "configurazione sono preservati."
+
+#, kde-format
+#~ msgctxt "@title:window"
+#~ msgid "Choose a System Sensor"
+#~ msgstr "Scegli un Sensore di Sistema"
+
+#, kde-format
+#~ msgctxt "@action:button"
+#~ msgid "Close"
+#~ msgstr "Chiudi"
+
+#, kde-format
+#~ msgctxt "@info:placeholder"
+#~ msgid "Search sensor (e.g. CPU, GPU, RAM, network, battery)…"
+#~ msgstr "Cerca sensore (es. CPU, GPU, RAM, rete, batteria)..."
+
+#, kde-format
+#~ msgid "No sensors received from ksystemstats."
+#~ msgstr "Nessun sensore ricevuto da ksystemstats."
+
+#, kde-format
+#~ msgid "No matching sensors found."
+#~ msgstr "Nessun sensore trovato per la ricerca."
+
+#, kde-format
+#~ msgid "Dynamic color for sensors (based on value)"
+#~ msgstr "Colore dinamico per i sensori (in base al valore)"
+
+#, kde-format
+#~ msgid "Active sensors:"
+#~ msgstr "Sensori attivi:"
+
+#, kde-format
+#~ msgid "No sensors configured."
+#~ msgstr "Nessun sensore configurato."
+
+#, kde-format
+#~ msgctxt "@info:placeholder"
+#~ msgid "Label"
+#~ msgstr "Etichetta"
+
+#, kde-format
+#~ msgctxt "@info:tooltip"
+#~ msgid "Remove sensor from AOD"
+#~ msgstr "Rimuovi sensore dall'AOD"
+
+#, kde-format
+#~ msgctxt "@action:button"
+#~ msgid "Add sensor…"
+#~ msgstr "Aggiungi sensore..."
+
+#, kde-format
+#~ msgctxt "@action:button"
+#~ msgid "Reset to defaults"
+#~ msgstr "Reimposta predefiniti"

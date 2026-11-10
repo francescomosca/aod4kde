@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=AOD4KDE Settings
+GenericName=Always-On-Display Settings
+Comment=Configure the Always-On-Display screen on KDE Plasma
+Comment[it]=Configura la schermata Always-On-Display su KDE Plasma
+Exec=aod-settings
+Icon=preferences-desktop-display
+Categories=Qt;KDE;Settings;DesktopSettings;
+Keywords=aod;aod4kde;always-on-display;lockscreen;oled;screenlocker;
+Terminal=false
+StartupNotify=true

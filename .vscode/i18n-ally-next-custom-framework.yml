@@ -1,0 +1,16 @@
+# .vscode/i18n-ally-next-custom-framework.yml
+languageIds:
+  - cpp
+  - qml
+  - javascript
+
+usageMatchRegex:
+  # Matches i18n("..."), ki18n.i18n("..."), ki18n("..."), i18nc("ctx", "..."), i18np("...", "...", n)
+  - >-
+    (?:^|\W)(?:ki18n\.)?k?i18n(?:c|cp|p)?\(\s*(?:[^,\)]+,\s*)*["'']({key})["'']
+
+refactorTemplates:
+  - 'i18n("$1")'
+  - 'ki18n.i18n("$1")'
+
+monopoly: true

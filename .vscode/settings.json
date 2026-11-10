@@ -1,0 +1,24 @@
+{
+  "markdown.validate.enabled": true,
+
+  "clangd.arguments": [
+    "--compile-commands-dir=${workspaceFolder}"
+  ],
+
+  "i18n-ally-next.localesPaths": [
+    "po",
+    "extensions/*/po"
+  ],
+  "i18n-ally-next.enabledParsers": [
+    "po"
+  ],
+  "i18n-ally-next.pathMatcher": "{locale}.po",
+  "i18n-ally-next.sourceLanguage": "en",
+  "i18n-ally-next.displayLanguage": "it",
+  "i18n-ally-next.enabledFrameworks": [
+    "custom"
+  ],
+  "i18n-ally-next.keystyle": "flat",
+  "i18n-ally-next.regex.key": ".*?",
+  "i18n-ally-next.disablePathParsing": true
+}

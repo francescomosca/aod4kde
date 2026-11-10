@@ -1,0 +1,236 @@
+name: Release & Packaging
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-release:
+    name: Build Portable Tarball & Release Notes
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Qt6 & KF6 build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            pkg-config \
+            gettext \
+            qt6-base-dev \
+            qt6-base-dev-tools \
+            libqt6svg6-dev \
+            qt6-declarative-dev \
+            libkf6i18n-dev
+
+      - name: Package pre-built tarball
+        run: |
+          bash tools/package-release.sh
+
+      - name: Compute sha256 checksums
+        run: |
+          cd dist
+          sha256sum aod4kde-linux-x86_64.tar.gz > aod4kde-linux-x86_64.tar.gz.sha256
+
+      - name: Generate Changelog with git-cliff
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+        env:
+          OUTPUT: RELEASE_NOTES.md
+
+      - name: Upload portable release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: portable-release
+          path: |
+            dist/aod4kde-linux-x86_64.tar.gz
+            dist/aod4kde-linux-x86_64.tar.gz.sha256
+            RELEASE_NOTES.md
+
+  build-arch-package:
+    name: Build Native Arch Linux Package (.pkg.tar.zst)
+    needs: build-release
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download portable release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: portable-release
+          path: dist
+
+      - name: Build Arch package via makepkg
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          [ -z "$TAG" ] && TAG="1.0.0"
+
+          useradd -m builduser
+          
+          mkdir -p /tmp/arch-build
+          cp -r packaging/arch/aod4kde-bin/* /tmp/arch-build/
+          cp dist/aod4kde-linux-x86_64.tar.gz /tmp/arch-build/aod4kde-v${TAG}-linux-x86_64.tar.gz
+
+          cd /tmp/arch-build
+          sed -i "s/^pkgver=.*/pkgver=$TAG/" PKGBUILD
+          sed -i "s/^pkgrel=.*/pkgrel=1/" PKGBUILD
+
+          SHA_BIN=$(sha256sum aod4kde-v${TAG}-linux-x86_64.tar.gz | awk '{print $1}')
+          sed -i "s/sha256sums=('.*')/sha256sums=('$SHA_BIN')/" PKGBUILD
+
+          chown -R builduser:builduser /tmp/arch-build
+          su builduser -c "cd /tmp/arch-build && makepkg -df --noconfirm"
+
+          mkdir -p "$GITHUB_WORKSPACE/dist-arch"
+          PKG_FILE=$(ls /tmp/arch-build/*.pkg.tar.zst)
+          cp "$PKG_FILE" "$GITHUB_WORKSPACE/dist-arch/"
+          cp "$PKG_FILE" "$GITHUB_WORKSPACE/dist-arch/aod4kde-bin-x86_64.pkg.tar.zst"
+          cd "$GITHUB_WORKSPACE/dist-arch"
+          for pkg in *.pkg.tar.zst; do
+            sha256sum "$pkg" > "${pkg}.sha256"
+          done
+
+      - name: Upload Arch package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: arch-package
+          path: dist-arch/*
+
+  publish-github-release:
+    name: Publish GitHub Release
+    needs: [build-release, build-arch-package]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release-files
+          cp all-artifacts/portable-release/aod4kde-linux-x86_64.tar.gz* release-files/
+          cp all-artifacts/arch-package/*.pkg.tar.zst* release-files/
+          cp all-artifacts/portable-release/RELEASE_NOTES.md ./
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          files: release-files/*
+
+  aur-publish:
+    name: Publish to AUR (Optional / when account available)
+    needs: publish-github-release
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: Check AUR SSH Secret
+        id: check-secret
+        env:
+          AUR_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        run: |
+          if [ -z "$AUR_KEY" ]; then
+            echo "::notice::AUR_SSH_PRIVATE_KEY secret is not configured. Skipping AUR push."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout repository
+        if: steps.check-secret.outputs.skip == 'false'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download portable artifacts
+        if: steps.check-secret.outputs.skip == 'false'
+        uses: actions/download-artifact@v4
+        with:
+          name: portable-release
+          path: dist
+
+      - name: Setup SSH & System tools
+        if: steps.check-secret.outputs.skip == 'false'
+        run: |
+          pacman -Syu --noconfirm git openssh curl
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AUR_SSH_PRIVATE_KEY }}" > ~/.ssh/aur_rsa
+          chmod 600 ~/.ssh/aur_rsa
+          ssh-keyscan -H aur.archlinux.org >> ~/.ssh/known_hosts
+
+          cat << 'EOF' > ~/.ssh/config
+          Host aur.archlinux.org
+            IdentityFile ~/.ssh/aur_rsa
+            User aur
+          EOF
+
+          useradd -m builduser
+          git config --global user.name "${{ secrets.AUR_USERNAME || 'GitHub Action' }}"
+          git config --global user.email "${{ secrets.AUR_EMAIL || 'action@github.com' }}"
+
+      - name: Update and push aod4kde-bin
+        if: steps.check-secret.outputs.skip == 'false'
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          SHA_BIN=$(sha256sum dist/aod4kde-linux-x86_64.tar.gz | awk '{print $1}')
+
+          git clone ssh://aur@aur.archlinux.org/aod4kde-bin.git /tmp/aur-bin
+          cp packaging/arch/aod4kde-bin/PKGBUILD /tmp/aur-bin/PKGBUILD
+          cp packaging/arch/aod4kde-bin/aod4kde.install /tmp/aur-bin/aod4kde.install
+
+          cd /tmp/aur-bin
+          sed -i "s/^pkgver=.*/pkgver=$TAG/" PKGBUILD
+          sed -i "s/^pkgrel=.*/pkgrel=1/" PKGBUILD
+          sed -i "s/sha256sums=('.*')/sha256sums=('$SHA_BIN')/" PKGBUILD
+
+          chown -R builduser:builduser /tmp/aur-bin
+          su builduser -c "cd /tmp/aur-bin && makepkg --printsrcinfo > .SRCINFO"
+
+          git add PKGBUILD .SRCINFO aod4kde.install
+          if ! git diff --cached --quiet; then
+            git commit -m "Update aod4kde-bin to v$TAG"
+            git push origin master
+          fi
+
+      - name: Update and push aod4kde (source)
+        if: steps.check-secret.outputs.skip == 'false'
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          SRC_URL="https://github.com/francescomosca/aod4kde/archive/refs/tags/v${TAG}.tar.gz"
+          curl -sL "$SRC_URL" -o /tmp/source.tar.gz
+          SHA_SRC=$(sha256sum /tmp/source.tar.gz | awk '{print $1}')
+
+          git clone ssh://aur@aur.archlinux.org/aod4kde.git /tmp/aur-src
+          cp packaging/arch/aod4kde/PKGBUILD /tmp/aur-src/PKGBUILD
+          cp packaging/arch/aod4kde/aod4kde.install /tmp/aur-src/aod4kde.install
+
+          cd /tmp/aur-src
+          sed -i "s/^pkgver=.*/pkgver=$TAG/" PKGBUILD
+          sed -i "s/^pkgrel=.*/pkgrel=1/" PKGBUILD
+          sed -i "s/sha256sums=('.*')/sha256sums=('$SHA_SRC')/" PKGBUILD
+
+          chown -R builduser:builduser /tmp/aur-src
+          su builduser -c "cd /tmp/aur-src && makepkg --printsrcinfo > .SRCINFO"
+
+          git add PKGBUILD .SRCINFO aod4kde.install
+          if ! git diff --cached --quiet; then
+            git commit -m "Update aod4kde to v$TAG"
+            git push origin master
+          fi

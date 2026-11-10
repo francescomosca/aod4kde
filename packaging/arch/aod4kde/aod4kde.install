@@ -1,0 +1,38 @@
+post_install() {
+    # Clean up legacy hooks/services from ./install.sh if previously installed manually
+    rm -f /etc/pacman.d/hooks/99-aod4kde.hook
+    if [ -f /etc/systemd/system/aod4kde-lockscreen.path ]; then
+        systemctl disable --now aod4kde-lockscreen.path 2>/dev/null || true
+        rm -f /etc/systemd/system/aod4kde-lockscreen.path /etc/systemd/system/aod4kde-lockscreen.service
+        systemctl daemon-reload 2>/dev/null || true
+    fi
+
+    if [ -x /usr/lib/aod4kde/patch-lockscreen.sh ]; then
+        /usr/lib/aod4kde/patch-lockscreen.sh
+    fi
+    echo "==> AOD4KDE installed. Enable the tray service for your user with:"
+    echo "    systemctl --user enable --now aod-tray.service"
+}
+
+post_upgrade() {
+    # Ensure legacy hooks from manual install.sh don't conflict
+    rm -f /etc/pacman.d/hooks/99-aod4kde.hook
+    if [ -f /etc/systemd/system/aod4kde-lockscreen.path ]; then
+        systemctl disable --now aod4kde-lockscreen.path 2>/dev/null || true
+        rm -f /etc/systemd/system/aod4kde-lockscreen.path /etc/systemd/system/aod4kde-lockscreen.service
+        systemctl daemon-reload 2>/dev/null || true
+    fi
+
+    if [ -x /usr/lib/aod4kde/patch-lockscreen.sh ]; then
+        /usr/lib/aod4kde/patch-lockscreen.sh
+    fi
+}
+
+pre_remove() {
+    LOCKSCREEN_SYS="/usr/share/plasma/shells/org.kde.plasma.desktop/contents/lockscreen"
+    if [ -f "$LOCKSCREEN_SYS/LockScreenUi.qml.stock_backup" ]; then
+        mv -f "$LOCKSCREEN_SYS/LockScreenUi.qml.stock_backup" "$LOCKSCREEN_SYS/LockScreenUi.qml"
+    fi
+    rm -rf "$LOCKSCREEN_SYS/custom-aod"
+}
+

@@ -1,0 +1,13 @@
+[Unit]
+Description=AOD4KDE Tray & Notification Monitor
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/aod-tray
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
+

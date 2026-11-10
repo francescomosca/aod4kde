@@ -1,0 +1,1 @@
+Developer documentation, localization guides, and custom extension templates.

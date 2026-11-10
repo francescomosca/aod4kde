@@ -1,0 +1,38 @@
+{
+  "enabled": true,
+  "showDate": true,
+  "useCustomDateFormat": false,
+  "customDateFormat": "ddd, d MMMM",
+  "showBattery": true,
+  "showBackground": false,
+  "backgroundOpacity": 20,
+  "onlyOnCustomScreen": false,
+  "targetScreen": "",
+  "targetScreenModel": "",
+  "pixelShiftInterval": 60,
+  "scale": 100,
+  "clockFont": "system",
+  "extensionOrder": [
+    "io.github.aod4kde.notifications",
+    "io.github.aod4kde.sensors"
+  ],
+  "extensions": {
+    "io.github.aod4kde.notifications": {
+      "enabled": true,
+      "config": {}
+    },
+    "io.github.aod4kde.sensors": {
+      "enabled": false,
+      "config": {
+        "coloredSensors": true,
+        "sensors": [
+          {
+            "id": "cpu/all/usage",
+            "label": "CPU",
+            "unit": "%"
+          }
+        ]
+      }
+    }
+  }
+}

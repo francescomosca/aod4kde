@@ -1,0 +1,123 @@
+# Maintainer: Francesco Mosca
+pkgname=aod4kde
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Customizable Always-On-Display screen for KDE Plasma 6"
+arch=('x86_64' 'aarch64')
+url="https://github.com/francescomosca/aod4kde"
+license=('GPL-2.0-or-later')
+depends=(
+    'plasma-desktop>=6.0'
+    'qt6-base'
+    'qt6-svg'
+    'qt6-declarative'
+    'ki18n'
+    'kirigami'
+    'plasma5support'
+    'libksysguard'
+    'ksystemstats'
+)
+makedepends=(
+    'gcc'
+    'make'
+    'pkgconf'
+    'gettext'
+)
+provides=('aod4kde')
+conflicts=('aod4kde-bin')
+install=aod4kde.install
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+    cd "$srcdir/$pkgname-$pkgver"
+    make all
+}
+
+package() {
+    cd "$srcdir/$pkgname-$pkgver"
+
+    # Binaries
+    install -Dm755 "src/tray/aod-tray" "$pkgdir/usr/bin/aod-tray"
+    install -Dm755 "src/settings/aod-settings" "$pkgdir/usr/bin/aod-settings"
+    install -Dm755 "src/helper/aod-helper" "$pkgdir/usr/lib/aod4kde/aod-helper"
+    install -Dm755 "src/lockscreen/patch-lockscreen.sh" "$pkgdir/usr/lib/aod4kde/patch-lockscreen.sh"
+    install -Dm755 "src/lockscreen/test-lockscreen.sh" "$pkgdir/usr/lib/aod4kde/test-lockscreen.sh"
+    install -Dm755 "src/lockscreen/test-lockscreen.sh" "$pkgdir/usr/share/aod4kde/lockscreen/test-lockscreen.sh"
+
+    # Desktop entry & systemd user service
+    sed 's|^Exec=aod-settings|Exec=/usr/bin/aod-settings|' "src/settings/aod-settings.desktop" \
+        | install -Dm644 /dev/stdin "$pkgdir/usr/share/applications/aod-settings.desktop"
+    sed 's|^ExecStart=.*|ExecStart=/usr/bin/aod-tray|' "src/tray/aod-tray.service" \
+        | install -Dm644 /dev/stdin "$pkgdir/usr/lib/systemd/user/aod-tray.service"
+
+    # Settings QML & default configuration
+    install -Dm644 "src/settings/aod-config.qml" "$pkgdir/usr/share/aod4kde/aod-config.qml"
+    install -Dm644 "src/settings/default-config.json" "$pkgdir/usr/share/aod4kde/default-config.json"
+    install -dm755 "$pkgdir/usr/share/aod4kde/components"
+    cp -r src/settings/components/. "$pkgdir/usr/share/aod4kde/components/"
+
+    # Assets & Lockscreen QML
+    install -dm755 "$pkgdir/usr/share/aod4kde/assets"
+    cp -r assets/. "$pkgdir/usr/share/aod4kde/assets/"
+    install -Dm644 "src/lockscreen/AodOverlay.qml.inc" "$pkgdir/usr/share/aod4kde/lockscreen/AodOverlay.qml.inc"
+    install -Dm644 "src/lockscreen/patch-lockscreen.awk" "$pkgdir/usr/share/aod4kde/lockscreen/patch-lockscreen.awk"
+    install -Dm644 "src/lockscreen/custom-aod/AodClockStats.qml" "$pkgdir/usr/share/aod4kde/lockscreen/custom-aod/AodClockStats.qml"
+    install -Dm644 "src/lockscreen/custom-aod/AodSync.js" "$pkgdir/usr/share/aod4kde/lockscreen/custom-aod/AodSync.js"
+    install -dm755 "$pkgdir/usr/share/aod4kde/lockscreen/custom-aod/components"
+    cp -r src/lockscreen/custom-aod/components/. "$pkgdir/usr/share/aod4kde/lockscreen/custom-aod/components/"
+    install -dm755 "$pkgdir/usr/share/aod4kde/lockscreen/custom-aod/assets"
+    cp -r assets/. "$pkgdir/usr/share/aod4kde/lockscreen/custom-aod/assets/"
+
+    # Built-in extensions
+    install -dm755 "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.notifications/bin"
+    install -Dm644 "src/extensions/io.github.aod4kde.notifications/metadata.json" \
+        "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.notifications/metadata.json"
+    install -Dm644 "src/extensions/io.github.aod4kde.notifications/LockscreenWidget.qml" \
+        "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.notifications/LockscreenWidget.qml"
+    install -Dm755 "src/extensions/io.github.aod4kde.notifications/bin/aod-ext-notifications" \
+        "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.notifications/bin/aod-ext-notifications"
+
+    install -dm755 "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.sensors/bin"
+    install -Dm644 "src/extensions/io.github.aod4kde.sensors/metadata.json" \
+        "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.sensors/metadata.json"
+    install -Dm644 "src/extensions/io.github.aod4kde.sensors/LockscreenWidget.qml" \
+        "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.sensors/LockscreenWidget.qml"
+    install -Dm644 "src/extensions/io.github.aod4kde.sensors/SettingsWidget.qml" \
+        "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.sensors/SettingsWidget.qml"
+    install -Dm644 "src/extensions/io.github.aod4kde.sensors/SensorPickerPopup.qml" \
+        "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.sensors/SensorPickerPopup.qml"
+    install -Dm755 "src/extensions/io.github.aod4kde.sensors/bin/aod-ext-sensors" \
+        "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.sensors/bin/aod-ext-sensors"
+    if [ -d "src/extensions/io.github.aod4kde.sensors/locale" ]; then
+        cp -r "src/extensions/io.github.aod4kde.sensors/locale" \
+            "$pkgdir/usr/share/aod4kde/extensions/io.github.aod4kde.sensors/"
+    fi
+
+    # Locales
+    for MO_FILE in po/*/LC_MESSAGES/aod4kde.mo; do
+        [ -f "$MO_FILE" ] || continue
+        LANG_CODE="$(basename "$(dirname "$(dirname "$MO_FILE")")")"
+        install -Dm644 "$MO_FILE" "$pkgdir/usr/share/locale/$LANG_CODE/LC_MESSAGES/aod4kde.mo"
+    done
+    for EXT_MO in src/extensions/*/locale/*/LC_MESSAGES/*.mo; do
+        [ -f "$EXT_MO" ] || continue
+        LANG_CODE="$(basename "$(dirname "$(dirname "$EXT_MO")")")"
+        MO_NAME="$(basename "$EXT_MO")"
+        install -Dm644 "$EXT_MO" "$pkgdir/usr/share/locale/$LANG_CODE/LC_MESSAGES/$MO_NAME"
+    done
+
+    # Pacman ALPM hook to keep lockscreen patched across plasma-desktop upgrades
+    install -Dm644 /dev/stdin "$pkgdir/usr/share/libalpm/hooks/99-aod4kde.hook" <<EOF
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Path
+Target = usr/share/plasma/shells/org.kde.plasma.desktop/contents/lockscreen/*
+
+[Action]
+Description = Re-applying AOD4KDE patch to Plasma lockscreen...
+When = PostTransaction
+Exec = /usr/lib/aod4kde/patch-lockscreen.sh
+EOF
+}

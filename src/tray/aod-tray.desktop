@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=AOD4KDE Tray
+Comment=Always-On Display System Tray Monitor
+Exec=aod-tray
+Icon=preferences-desktop-display
+Terminal=false
+Categories=Utility;KDE;Qt;
+X-KDE-autostart-phase=2

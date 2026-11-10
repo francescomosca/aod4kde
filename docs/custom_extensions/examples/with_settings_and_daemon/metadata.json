@@ -1,0 +1,16 @@
+{
+  "id": "io.github.aod4kde.ext.sampledaemon",
+  "name": "Sample Daemon & Settings",
+  "description": "Esempio completo con demone C++ in background e pannello impostazioni",
+  "icon": "utilities-system-monitor",
+  "version": "1.0.0",
+  "author": "Community",
+  "lockscreenQml": "LockscreenWidget.qml",
+  "settingsQml": "SettingsWidget.qml",
+  "daemon": "bin/aod-ext-example",
+  "defaultConfig": {
+    "prefix": "System:",
+    "color": "#00ffcc"
+  }
+}
+

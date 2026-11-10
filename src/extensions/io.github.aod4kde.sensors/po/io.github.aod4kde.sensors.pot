@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the io.github.aod4kde.sensors package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: io.github.aod4kde.sensors\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-10 22:47+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: SensorPickerPopup.qml:98
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose a System Sensor"
+msgstr ""
+
+#: SensorPickerPopup.qml:106
+#, kde-format
+msgctxt "@action:button"
+msgid "Close"
+msgstr ""
+
+#: SensorPickerPopup.qml:115
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search sensor (e.g. CPU, GPU, RAM, network, battery)…"
+msgstr ""
+
+#: SensorPickerPopup.qml:203
+#, kde-format
+msgid "No sensors received from ksystemstats."
+msgstr ""
+
+#: SensorPickerPopup.qml:204
+#, kde-format
+msgid "No matching sensors found."
+msgstr ""
+
+#: SettingsWidget.qml:98
+#, kde-format
+msgid "Dynamic color for sensors (based on value)"
+msgstr ""
+
+#: SettingsWidget.qml:111
+#, kde-format
+msgid "Active sensors:"
+msgstr ""
+
+#: SettingsWidget.qml:117
+#, kde-format
+msgid "No sensors configured."
+msgstr ""
+
+#: SettingsWidget.qml:143
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Label"
+msgstr ""
+
+#: SettingsWidget.qml:183
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr ""
+
+#: SettingsWidget.qml:185
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove sensor from AOD"
+msgstr ""
+
+#: SettingsWidget.qml:213
+#, kde-format
+msgctxt "@action:button"
+msgid "Add sensor…"
+msgstr ""
+
+#: SettingsWidget.qml:221
+#, kde-format
+msgctxt "@action:button"
+msgid "Reset to defaults"
+msgstr ""
