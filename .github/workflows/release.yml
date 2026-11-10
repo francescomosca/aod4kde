@@ -6,75 +6,56 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build-release:
-    name: Build Portable Tarball & Release Notes
-    runs-on: ubuntu-24.04
+    name: Build Release Assets (Portable Tarball & Arch Package)
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
     steps:
+      - name: Install build dependencies & tools
+        run: |
+          pacman -Syu --noconfirm \
+            git \
+            gcc \
+            make \
+            pkgconf \
+            gettext \
+            qt6-base \
+            qt6-svg \
+            qt6-declarative \
+            ki18n \
+            git-cliff
+
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory '*'
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install Qt6 & KF6 build dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            pkg-config \
-            gettext \
-            qt6-base-dev \
-            qt6-base-dev-tools \
-            libqt6svg6-dev \
-            qt6-declarative-dev \
-            libkf6i18n-dev
-
-      - name: Package pre-built tarball
+      - name: Package portable release tarball
         run: |
           bash tools/package-release.sh
-
-      - name: Compute sha256 checksums
-        run: |
           cd dist
           sha256sum aod4kde-linux-x86_64.tar.gz > aod4kde-linux-x86_64.tar.gz.sha256
 
-      - name: Generate Changelog with git-cliff
-        uses: orhun/git-cliff-action@v4
-        with:
-          config: cliff.toml
-          args: --latest --strip header
-        env:
-          OUTPUT: RELEASE_NOTES.md
-
-      - name: Upload portable release artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: portable-release
-          path: |
-            dist/aod4kde-linux-x86_64.tar.gz
-            dist/aod4kde-linux-x86_64.tar.gz.sha256
-            RELEASE_NOTES.md
-
-  build-arch-package:
-    name: Build Native Arch Linux Package (.pkg.tar.zst)
-    needs: build-release
-    runs-on: ubuntu-latest
-    container:
-      image: archlinux:base-devel
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download portable release artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: portable-release
-          path: dist
-
-      - name: Build Arch package via makepkg
+      - name: Build Arch native package (.pkg.tar.zst) via makepkg
         run: |
-          TAG="${GITHUB_REF_NAME#v}"
-          [ -z "$TAG" ] && TAG="1.0.0"
+          VERSION_FILE="$(tr -d ' \n\r' < VERSION)"
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            TAG="${GITHUB_REF_NAME#v}"
+            if [ "$TAG" != "$VERSION_FILE" ]; then
+              echo "::error::Tag v$TAG does not match VERSION ($VERSION_FILE)"
+              exit 1
+            fi
+          else
+            TAG="$VERSION_FILE"
+          fi
 
           useradd -m builduser
           
@@ -93,7 +74,7 @@ jobs:
           su builduser -c "cd /tmp/arch-build && makepkg -df --noconfirm"
 
           mkdir -p "$GITHUB_WORKSPACE/dist-arch"
-          PKG_FILE=$(ls /tmp/arch-build/*.pkg.tar.zst)
+          PKG_FILE=$(ls /tmp/arch-build/aod4kde-bin-[0-9]*.pkg.tar.zst | head -n1)
           cp "$PKG_FILE" "$GITHUB_WORKSPACE/dist-arch/"
           cp "$PKG_FILE" "$GITHUB_WORKSPACE/dist-arch/aod4kde-bin-x86_64.pkg.tar.zst"
           cd "$GITHUB_WORKSPACE/dist-arch"
@@ -101,15 +82,26 @@ jobs:
             sha256sum "$pkg" > "${pkg}.sha256"
           done
 
-      - name: Upload Arch package artifact
+      - name: Generate Changelog with git-cliff
+        run: |
+          git-cliff --latest --strip header --output RELEASE_NOTES.md || echo "Initial release" > RELEASE_NOTES.md
+
+      - name: Prepare release artifacts directory
+        run: |
+          mkdir -p release-assets
+          cp dist/aod4kde-linux-x86_64.tar.gz* release-assets/
+          cp dist-arch/*.pkg.tar.zst* release-assets/
+          cp RELEASE_NOTES.md release-assets/
+
+      - name: Upload release artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: arch-package
-          path: dist-arch/*
+          name: release-assets
+          path: release-assets/*
 
   publish-github-release:
     name: Publish GitHub Release
-    needs: [build-release, build-arch-package]
+    needs: build-release
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
@@ -118,20 +110,18 @@ jobs:
       - name: Download all release artifacts
         uses: actions/download-artifact@v4
         with:
-          path: all-artifacts
-
-      - name: Prepare release assets
-        run: |
-          mkdir -p release-files
-          cp all-artifacts/portable-release/aod4kde-linux-x86_64.tar.gz* release-files/
-          cp all-artifacts/arch-package/*.pkg.tar.zst* release-files/
-          cp all-artifacts/portable-release/RELEASE_NOTES.md ./
+          name: release-assets
+          path: release-files
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          body_path: RELEASE_NOTES.md
-          files: release-files/*
+          body_path: release-files/RELEASE_NOTES.md
+          files: |
+            release-files/*.tar.gz
+            release-files/*.tar.gz.sha256
+            release-files/*.pkg.tar.zst
+            release-files/*.pkg.tar.zst.sha256
 
   aur-publish:
     name: Publish to AUR (Optional / when account available)
@@ -153,25 +143,31 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Configure Git safe directory
+        if: steps.check-secret.outputs.skip == 'false'
+        run: git config --global --add safe.directory '*'
+
       - name: Checkout repository
         if: steps.check-secret.outputs.skip == 'false'
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Download portable artifacts
+      - name: Download release artifacts
         if: steps.check-secret.outputs.skip == 'false'
         uses: actions/download-artifact@v4
         with:
-          name: portable-release
+          name: release-assets
           path: dist
 
       - name: Setup SSH & System tools
         if: steps.check-secret.outputs.skip == 'false'
+        env:
+          AUR_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          AUR_USER: ${{ secrets.AUR_USERNAME }}
+          AUR_MAIL: ${{ secrets.AUR_EMAIL }}
         run: |
           pacman -Syu --noconfirm git openssh curl
           mkdir -p ~/.ssh
-          echo "${{ secrets.AUR_SSH_PRIVATE_KEY }}" > ~/.ssh/aur_rsa
+          printf '%s\n' "$AUR_KEY" > ~/.ssh/aur_rsa
           chmod 600 ~/.ssh/aur_rsa
           ssh-keyscan -H aur.archlinux.org >> ~/.ssh/known_hosts
 
@@ -182,8 +178,8 @@ jobs:
           EOF
 
           useradd -m builduser
-          git config --global user.name "${{ secrets.AUR_USERNAME || 'GitHub Action' }}"
-          git config --global user.email "${{ secrets.AUR_EMAIL || 'action@github.com' }}"
+          git config --global user.name "${AUR_USER:-GitHub Action}"
+          git config --global user.email "${AUR_MAIL:-action@github.com}"
 
       - name: Update and push aod4kde-bin
         if: steps.check-secret.outputs.skip == 'false'
@@ -214,7 +210,7 @@ jobs:
         run: |
           TAG="${GITHUB_REF_NAME#v}"
           SRC_URL="https://github.com/francescomosca/aod4kde/archive/refs/tags/v${TAG}.tar.gz"
-          curl -sL "$SRC_URL" -o /tmp/source.tar.gz
+          curl -fsSL --retry 3 "$SRC_URL" -o /tmp/source.tar.gz
           SHA_SRC=$(sha256sum /tmp/source.tar.gz | awk '{print $1}')
 
           git clone ssh://aur@aur.archlinux.org/aod4kde.git /tmp/aur-src
