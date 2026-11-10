@@ -25,6 +25,7 @@ makedepends=(
 )
 provides=('aod4kde')
 conflicts=('aod4kde-bin')
+options=('!debug')
 install=aod4kde.install
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
 sha256sums=('SKIP')

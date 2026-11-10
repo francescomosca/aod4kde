@@ -19,6 +19,7 @@ depends=(
 )
 provides=('aod4kde')
 conflicts=('aod4kde')
+options=('!debug')
 install=aod4kde.install
 source=("aod4kde-v${pkgver}-linux-x86_64.tar.gz::$url/releases/download/v$pkgver/aod4kde-linux-x86_64.tar.gz")
 sha256sums=('SKIP')
