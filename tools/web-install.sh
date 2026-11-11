@@ -28,18 +28,25 @@ if [ "$EUID" -eq 0 ]; then
     exit 1
 fi
 
+TMP_DIR="$(mktemp -d -t aod4kde-install.XXXXXX)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
 # 1. Arch Linux / derivatives
 if [ -f /etc/arch-release ] && command -v pacman >/dev/null 2>&1; then
-    echo -e "${CYAN}==> Arch Linux detected. Installing native package via pacman...${NC}"
-    sudo pacman -U "$ARCH_PKG_URL"
+    echo -e "${CYAN}==> Arch Linux detected. Downloading native package...${NC}"
+    PKG_FILE="$TMP_DIR/aod4kde-bin-x86_64.pkg.tar.zst"
+    if ! curl -sSLf "$ARCH_PKG_URL" -o "$PKG_FILE"; then
+        echo -e "${RED}ERROR: Failed to download Arch Linux package.${NC}"
+        exit 1
+    fi
+    echo -e "${CYAN}==> Installing package via pacman...${NC}"
+    sudo pacman -U "$PKG_FILE"
     echo -e "${GREEN}[OK] AOD4KDE installed successfully!${NC}"
     exit 0
 fi
 
 # 2. Generic Linux (Ubuntu, Debian, Fedora, openSUSE, etc.)
 echo -e "${CYAN}==> Generic Linux detected. Downloading latest pre-built tarball...${NC}"
-TMP_DIR="$(mktemp -d -t aod4kde-install.XXXXXX)"
-trap 'rm -rf "$TMP_DIR"' EXIT
 
 if ! curl -sSLf "$TAR_URL" | tar -xz -C "$TMP_DIR"; then
     echo -e "${RED}ERROR: Failed to download or extract AOD4KDE release archive.${NC}"

@@ -59,14 +59,10 @@ _Automatically detects your distribution and installs the latest version using n
 ### Manual Installation
 
 #### Arch Linux
-Install the latest pre-compiled native package directly with `pacman`:
+Download the `.pkg.tar.zst` file from the [Releases](https://github.com/francescomosca/aod4kde/releases) page (or via `curl`) and install it locally with `pacman`:
 ```bash
-sudo pacman -U https://github.com/francescomosca/aod4kde/releases/latest/download/aod4kde-bin-x86_64.pkg.tar.zst
-```
-
-Or download the `.pkg.tar.zst` file from the [Releases](https://github.com/francescomosca/aod4kde/releases) page and install it locally:
-```bash
-sudo pacman -U aod4kde-bin-*.pkg.tar.zst
+curl -fLO https://github.com/francescomosca/aod4kde/releases/latest/download/aod4kde-bin-x86_64.pkg.tar.zst
+sudo pacman -U aod4kde-bin-x86_64.pkg.tar.zst
 ```
 
 <details>
