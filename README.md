@@ -38,11 +38,13 @@ A customizable, lightweight Always-On-Display (AOD) screen for KDE Plasma 6 that
 
 ## Screenshots
 
-| Always-On Display | Settings |
-| :---: | :---: |
-| ![AOD Screenshot](./docs/resources/screenshots/aod-1.png) | ![AOD Settings Appearance Screenshot](./docs/resources/screenshots/settings-1.png)<br><br>![AOD Settings Extensions Screenshot](./docs/resources/screenshots/settings-2.png) |
+| Always-On Display |
+| :---: |
+| ![AOD Screenshot](./docs/resources/screenshots/aod-1.png) |
 
----
+| Settings - Appearance | Settings - Extensions |
+| :---: | :---: |
+| ![AOD Settings Appearance Screenshot](./docs/resources/screenshots/settings-1.png) | ![AOD Settings Extensions Screenshot](./docs/resources/screenshots/settings-2.png) |
 
 ## Installation
 
